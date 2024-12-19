@@ -19,8 +19,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.tim.amortization.calculator.actions.CalculationUtility;
 
+/**
+ * Main class of the application, creates GUI for user to provide information.
+ * Calculation occurs in the CalculationUtility.java class.
+ */
 public class Application {
-	
+
+	/**
+	 * Main method used to initiate the application.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		JFrame frame = new JFrame();
@@ -36,12 +45,20 @@ public class Application {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Creates the GUI using Java Swing. Composed of JTextFields for inputs and
+	 * buttons to calculate amortization or to clear the fields. Fields come
+	 * pre-loaded with information as an example.
+	 * 
+	 * @param frame
+	 */
 	private static void createUI(JFrame frame) {
 
 		System.out.println("Creating UI elements...");
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
+		// sub-panels used to group the text fields and buttons together
 		JPanel formPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 
@@ -55,19 +72,16 @@ public class Application {
 		JButton calculateBtn = createButton("Calculate");
 		JButton resetBtn = createButton("Reset");
 
+		// add action listeners (event handlers) for the each button click
 		calculateBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CalculationUtility.calculateAmortizationSchedule(principal, interest, mortgageLength);
-//				BigDecimal monthlyInterest = CalculationUtility.calculateMonthlyInterest(principal, interest);
-//				Double principalOnly = monthlyPayment.doubleValue() - monthlyInterest.doubleValue();
-//				JOptionPane.showMessageDialog(frame, MessageFormat.format("Total Monthly Payment: {0}\nPrincipal Only: {1}\nInterest Payment: {2}", monthlyPayment, principalOnly, monthlyInterest));
 				JOptionPane.showMessageDialog(frame, "Done");
-
 			}
 		});
-		
+
 		resetBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -80,6 +94,7 @@ public class Application {
 
 			}
 		});
+
 		// add buttons to buttonPanel
 		buttonPanel.add(calculateBtn);
 		buttonPanel.add(resetBtn);
@@ -91,6 +106,12 @@ public class Application {
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Creates a new button with text provided.
+	 * 
+	 * @param text
+	 * @return
+	 */
 	private static JButton createButton(String text) {
 
 		JButton button = new JButton(text);
@@ -98,6 +119,14 @@ public class Application {
 		return button;
 	}
 
+	/**
+	 * Creates a label and a text field and adds it to the provided JPanel.
+	 * 
+	 * @param panel
+	 * @param labelText
+	 * @param fieldText
+	 * @return
+	 */
 	private static JTextField addTextField(JPanel panel, String labelText, String fieldText) {
 		JTextField textField = new JTextField(StringUtils.isNotEmpty(fieldText) ? fieldText : null);
 		JLabel label = new JLabel(labelText);
