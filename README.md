@@ -6,9 +6,9 @@ Future Updates
 * Add new field for "Additional Principal Only Payment", update logic to account for this
 * In success dialog, output how long it would take to payoff the loan
 * Add error handling, to account for invalid inputs
-* Convert console output into Excel file using Apache POI
+* ~~Convert console output into Excel file using Apache POI~~
 * Update test coverage to be greater than 80%
-* Add additional comments + javadocs
+* ~~Add additional comments + javadocs~~
 
 ## Prerequisites
 * Java 17
