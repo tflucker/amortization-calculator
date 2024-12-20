@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tim.amortization.calculator.actions.CalculationUtility;
+import com.tim.amortization.calculator.exception.InputValidationException;
 
 /**
  * Main class of the application, creates GUI for user to provide information.
@@ -77,8 +78,12 @@ public class Application {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CalculationUtility.calculateAmortizationSchedule(principal, interest, mortgageLength);
-				JOptionPane.showMessageDialog(frame, "Done");
+				try {
+					CalculationUtility.calculateAmortizationSchedule(principal, interest, mortgageLength);
+					JOptionPane.showMessageDialog(frame, "Done");
+				} catch (InputValidationException ex) {
+					JOptionPane.showMessageDialog(frame, ex.getMessage(),"An Error Has Occurred", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
