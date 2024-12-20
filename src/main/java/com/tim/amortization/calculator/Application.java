@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,7 +20,9 @@ import javax.swing.JTextField;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tim.amortization.calculator.actions.CalculationUtility;
+import com.tim.amortization.calculator.actions.ExcelUtility;
 import com.tim.amortization.calculator.exception.InputValidationException;
+import com.tim.amortization.calculator.model.AmortizationRecord;
 
 /**
  * Main class of the application, creates GUI for user to provide information.
@@ -34,7 +38,7 @@ public class Application {
 	public static void main(String[] args) {
 
 		JFrame frame = new JFrame();
-		frame.setTitle("Ammortization Calculator");
+		frame.setTitle("Amortization Calculator");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		createUI(frame);
@@ -53,7 +57,7 @@ public class Application {
 	 * 
 	 * @param frame
 	 */
-	private static void createUI(JFrame frame) {
+	public static JFrame createUI(JFrame frame) {
 
 		System.out.println("Creating UI elements...");
 		JPanel mainPanel = new JPanel();
@@ -79,10 +83,19 @@ public class Application {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					CalculationUtility.calculateAmortizationSchedule(principal, interest, mortgageLength);
+					// calculate amortization schedule with provided input
+					List<AmortizationRecord> records = CalculationUtility.calculateAmortizationSchedule(principal,
+							interest, mortgageLength);
+					// create Excel document with the List<AmortizationRecord>
+					ExcelUtility.createExcelDoc(records);
+
 					JOptionPane.showMessageDialog(frame, "Done");
 				} catch (InputValidationException ex) {
-					JOptionPane.showMessageDialog(frame, ex.getMessage(),"An Error Has Occurred", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Input Validation Error",
+							JOptionPane.ERROR_MESSAGE);
+				} catch (IOException ex) {
+					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error creating Excel Spreadsheet",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -109,6 +122,8 @@ public class Application {
 		mainPanel.add(buttonPanel);
 
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+		
+		return frame;
 	}
 
 	/**
@@ -118,10 +133,7 @@ public class Application {
 	 * @return
 	 */
 	private static JButton createButton(String text) {
-
-		JButton button = new JButton(text);
-
-		return button;
+		return new JButton(text);
 	}
 
 	/**
