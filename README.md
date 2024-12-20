@@ -2,13 +2,14 @@
 
 Java project to show a sample amortization schedule for a mortgage.  Uses Java Swing for a basic GUI.  
 
-Future Updates
+### Future Updates
 * Add new field for "Additional Principal Only Payment", update logic to account for this
 * In success dialog, output how long it would take to payoff the loan
-* Add error handling, to account for invalid inputs
+* ~~Add error handling, to account for invalid inputs~~
 * ~~Convert console output into Excel file using Apache POI~~
 * Update test coverage to be greater than 80%
 * ~~Add additional comments + javadocs~~
+* Extract all Strings to CommonConstants file for abstractability
 
 ## Prerequisites
 * Java 17
