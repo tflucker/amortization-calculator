@@ -17,17 +17,20 @@ public class AmortizationRecord {
 
 	private BigDecimal remainingPrincipal;
 
+	private BigDecimal additionalPrincipalPayment;
+
 	public AmortizationRecord() {
 
 	}
 
 	public AmortizationRecord(int month, BigDecimal principalPaid, BigDecimal interestPaid,
-			BigDecimal remainingPrincipal) {
+			BigDecimal remainingPrincipal, BigDecimal additionalPrincipalPayment) {
 		super();
 		this.month = month;
 		this.principalPaid = principalPaid;
 		this.interestPaid = interestPaid;
 		this.remainingPrincipal = remainingPrincipal;
+		this.additionalPrincipalPayment = additionalPrincipalPayment;
 	}
 
 	public int getMonth() {
@@ -62,9 +65,17 @@ public class AmortizationRecord {
 		this.remainingPrincipal = remainingPrincipal;
 	}
 
+	public BigDecimal getAdditionalPrincipalPayment() {
+		return additionalPrincipalPayment;
+	}
+
+	public void setAdditionalPrincipalPayment(BigDecimal additionalPrincipalPayment) {
+		this.additionalPrincipalPayment = additionalPrincipalPayment;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(interestPaid, month, principalPaid, remainingPrincipal);
+		return Objects.hash(additionalPrincipalPayment, interestPaid, month, principalPaid, remainingPrincipal);
 	}
 
 	@Override
@@ -76,7 +87,8 @@ public class AmortizationRecord {
 		if (getClass() != obj.getClass())
 			return false;
 		AmortizationRecord other = (AmortizationRecord) obj;
-		return Objects.equals(interestPaid, other.interestPaid) && month == other.month
+		return Objects.equals(additionalPrincipalPayment, other.additionalPrincipalPayment)
+				&& Objects.equals(interestPaid, other.interestPaid) && month == other.month
 				&& Objects.equals(principalPaid, other.principalPaid)
 				&& Objects.equals(remainingPrincipal, other.remainingPrincipal);
 	}
@@ -84,7 +96,8 @@ public class AmortizationRecord {
 	@Override
 	public String toString() {
 		return "AmortizationRecord [month=" + month + ", principalPaid=" + principalPaid + ", interestPaid="
-				+ interestPaid + ", remainingPrincipal=" + remainingPrincipal + "]";
+				+ interestPaid + ", remainingPrincipal=" + remainingPrincipal + ", additionalPrincipalPayment="
+				+ additionalPrincipalPayment + "]";
 	}
 
 }

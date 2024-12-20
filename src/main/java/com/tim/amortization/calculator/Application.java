@@ -19,10 +19,10 @@ import javax.swing.JTextField;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.tim.amortization.calculator.actions.CalculationUtility;
-import com.tim.amortization.calculator.actions.ExcelUtility;
 import com.tim.amortization.calculator.exception.InputValidationException;
 import com.tim.amortization.calculator.model.AmortizationRecord;
+import com.tim.amortization.calculator.utilities.CalculationUtility;
+import com.tim.amortization.calculator.utilities.ExcelUtility;
 
 /**
  * Main class of the application, creates GUI for user to provide information.
@@ -43,7 +43,7 @@ public class Application {
 
 		createUI(frame);
 
-		frame.setSize(500, 500);
+		frame.setSize(500, 800);
 
 		frame.setLocationRelativeTo(null);
 		frame.pack();
@@ -67,12 +67,15 @@ public class Application {
 		JPanel formPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 
-		formPanel.setLayout(new GridLayout(3, 1));
+		formPanel.setLayout(new GridLayout(6, 1));
 		buttonPanel.setLayout(new FlowLayout());
+//		formPanel.add(new JLabel(
+//				"Welcome to the Amortization Calculator.  Please enter in you mortgage information to calculate an amortization schedule."));
 
 		JTextField principal = addTextField(formPanel, "Principal Balance Amount: ", "600,000");
 		JTextField interest = addTextField(formPanel, "Interest Percentage: ", "6.5");
 		JTextField mortgageLength = addTextField(formPanel, "Mortgage Length (Years): ", "30");
+		JTextField additionalPrincipalPayment = addTextField(formPanel, "Additional Principal Payment: ", "1000");
 
 		JButton calculateBtn = createButton("Calculate");
 		JButton resetBtn = createButton("Reset");
@@ -85,11 +88,13 @@ public class Application {
 				try {
 					// calculate amortization schedule with provided input
 					List<AmortizationRecord> records = CalculationUtility.calculateAmortizationSchedule(principal,
-							interest, mortgageLength);
+							interest, mortgageLength, additionalPrincipalPayment);
 					// create Excel document with the List<AmortizationRecord>
 					ExcelUtility.createExcelDoc(records);
-
-					JOptionPane.showMessageDialog(frame, "Done");
+					JOptionPane.showMessageDialog(frame,
+							"Excel Document created in this project directory.\nLoan paid off in "
+									+ Math.floorDiv(records.size(), 12) + " years and "
+									+ Math.floorMod(records.size(), 12) + " months.");
 				} catch (InputValidationException ex) {
 					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Input Validation Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -107,6 +112,7 @@ public class Application {
 				principal.setText(null);
 				interest.setText(null);
 				mortgageLength.setText(null);
+				additionalPrincipalPayment.setText(null);
 
 				JOptionPane.showMessageDialog(frame, "Form cleared!");
 
@@ -122,7 +128,7 @@ public class Application {
 		mainPanel.add(buttonPanel);
 
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-		
+
 		return frame;
 	}
 

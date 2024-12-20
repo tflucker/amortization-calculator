@@ -1,4 +1,4 @@
-package com.tim.amortization.calculator;
+package com.tim.amortization.calculator.utilities;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.tim.amortization.calculator.actions.ExcelUtility;
 import com.tim.amortization.calculator.model.AmortizationRecord;
 
 public class ExcelUtilityTest {
@@ -21,7 +20,7 @@ public class ExcelUtilityTest {
 		// setup sample data set
 		List<AmortizationRecord> records = new ArrayList<>();
 		BigDecimal test = new BigDecimal(25.32123123123).setScale(2, RoundingMode.CEILING);
-		records.add(new AmortizationRecord(1, test, test, test));
+		records.add(new AmortizationRecord(1, test, test, test, test));
 		
 		// call method
 		ExcelUtility.createExcelDoc(records);

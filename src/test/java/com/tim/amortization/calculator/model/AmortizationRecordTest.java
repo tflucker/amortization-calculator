@@ -22,26 +22,28 @@ public class AmortizationRecordTest {
 		rec.setPrincipalPaid(TEST_VALUE);
 		rec.setInterestPaid(TEST_VALUE);
 		rec.setRemainingPrincipal(TEST_VALUE);
+		rec.setAdditionalPrincipalPayment(TEST_VALUE);
 
 		assertEquals(1, rec.getMonth());
 		assertEquals(TEST_VALUE, rec.getPrincipalPaid());
 		assertEquals(TEST_VALUE, rec.getInterestPaid());
 		assertEquals(TEST_VALUE, rec.getRemainingPrincipal());
+		assertEquals(TEST_VALUE, rec.getAdditionalPrincipalPayment());
 
 	}
 
 	@Test
 	public void hashCodeTest() {
-		AmortizationRecord rec = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE);
+		AmortizationRecord rec = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE,TEST_VALUE);
 
 		assertNotNull(rec.hashCode());
 	}
 
 	@Test
 	public void equalsTest() {
-		AmortizationRecord rec1 = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE);
+		AmortizationRecord rec1 = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE,TEST_VALUE);
 
-		AmortizationRecord rec2 = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE);
+		AmortizationRecord rec2 = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE,TEST_VALUE);
 		Object obj = new Object();
 
 		assertTrue(rec1.equals(rec1));
@@ -56,9 +58,9 @@ public class AmortizationRecordTest {
 
 	@Test
 	public void toStringTest() {
-		AmortizationRecord rec = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE);
+		AmortizationRecord rec = new AmortizationRecord(1, TEST_VALUE, TEST_VALUE, TEST_VALUE,TEST_VALUE);
 
-		assertEquals("AmortizationRecord [month=1, principalPaid=25.33, interestPaid=25.33, remainingPrincipal=25.33]",
+		assertEquals("AmortizationRecord [month=1, principalPaid=25.33, interestPaid=25.33, remainingPrincipal=25.33, additionalPrincipalPayment=25.33]",
 				rec.toString());
 
 	}
