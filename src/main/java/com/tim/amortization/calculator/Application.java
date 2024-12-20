@@ -72,10 +72,10 @@ public class Application {
 //		formPanel.add(new JLabel(
 //				"Welcome to the Amortization Calculator.  Please enter in you mortgage information to calculate an amortization schedule."));
 
-		JTextField principal = addTextField(formPanel, "Principal Balance Amount: ", "600,000");
-		JTextField interest = addTextField(formPanel, "Interest Percentage: ", "6.5");
-		JTextField mortgageLength = addTextField(formPanel, "Mortgage Length (Years): ", "30");
-		JTextField additionalPrincipalPayment = addTextField(formPanel, "Additional Principal Payment: ", "1000");
+		JTextField principal = addTextField(formPanel, "  Principal Balance Amount: ", "600,000");
+		JTextField interest = addTextField(formPanel, "  Interest Percentage: ", "6.5");
+		JTextField mortgageLength = addTextField(formPanel, "  Mortgage Length (Years): ", "30");
+		JTextField additionalPrincipalPayment = addTextField(formPanel, "  Additional Principal Payment: ", "1000");
 
 		JButton calculateBtn = createButton("Calculate");
 		JButton resetBtn = createButton("Reset");
