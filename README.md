@@ -26,3 +26,5 @@ Java project to show a sample amortization schedule for a mortgage.  Uses Java S
 * Interest (percentage) - 6.5
 * Mortgage Length (years)- 30
 * Additional Principal Payment - 1000.00
+
+![screenshot](./src/main/resources/GUI_Screenshot.png)
