@@ -5,6 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JTextField;
 
@@ -18,6 +22,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.tim.amortization.calculator.exception.InputValidationException;
 
 /**
  * Contains logic to calculate payments and to output an excel document with all
@@ -39,9 +45,34 @@ public class CalculationUtility {
 		} else {
 			return null;
 		}
-
 	}
 
+	private static void validateInput(JTextField principalField, JTextField interestField,
+			JTextField mortgageField) {
+		List<String> errorMessages = new ArrayList<>();
+		
+		String principalAmt = principalField.getText();
+		String interestAmt = interestField.getText();
+		String mortgageLength = mortgageField.getText();
+		
+		if(StringUtils.isEmpty(principalAmt) || !Pattern.matches("(([0-9]){1,3}(,){1})+([0-9]){1,3}", principalAmt)) {
+			errorMessages.add("Invalid value for Principal Amount field. Value must be numeric.");
+		} 
+		if(StringUtils.isEmpty(interestAmt) || !Pattern.matches("([0-9]){1,2}(.){1}([0-9]){1,2}", interestAmt)) {
+			errorMessages.add("Invalid value for Interest Percentage. must be numeric");
+		} 
+		if(StringUtils.isEmpty(mortgageLength) || !StringUtils.isNumeric(mortgageLength)) {
+			errorMessages.add("Invalid value for Mortgage Length. Value must be numeric");
+		}
+		
+		
+		// if errorMessages is not empty then create one string with line separators to return to the user
+		if(!errorMessages.isEmpty()) {
+			String err = errorMessages.stream().collect(Collectors.joining("\n"));
+			throw new InputValidationException(err);
+		}
+	}
+	
 	/**
 	 * Calculate monthly payment with a PMT function.
 	 * 
@@ -100,6 +131,9 @@ public class CalculationUtility {
 	public static void calculateAmortizationSchedule(JTextField principalField, JTextField interestField,
 			JTextField mortgageField) {
 
+		// validate all user inputs, return String with a list of errors if validations fail.
+		validateInput(principalField, interestField, mortgageField);
+		
 		Double principalAmt = convertTextInput(principalField.getText());
 		Double interestAmt = convertTextInput(interestField.getText());
 		Double mortgageLength = convertTextInput(mortgageField.getText());
