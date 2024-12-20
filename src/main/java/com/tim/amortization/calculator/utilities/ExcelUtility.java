@@ -1,4 +1,4 @@
-package com.tim.amortization.calculator.actions;
+package com.tim.amortization.calculator.utilities;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +35,8 @@ public class ExcelUtility {
 		sheet.setColumnWidth(0, 3000);
 		sheet.setColumnWidth(1, 8000);
 		sheet.setColumnWidth(2, 8000);
-		sheet.setColumnWidth(3, 8000);
+		sheet.setColumnWidth(3, 12000);
+		sheet.setColumnWidth(4, 8000);
 
 		Row header = sheet.createRow(0);
 
@@ -62,6 +63,10 @@ public class ExcelUtility {
 		headerCell.setCellStyle(headerStyle);
 
 		headerCell = header.createCell(3);
+		headerCell.setCellValue("Additional Principal Payment");
+		headerCell.setCellStyle(headerStyle);
+
+		headerCell = header.createCell(4);
 		headerCell.setCellValue("Remaining Principal");
 		headerCell.setCellStyle(headerStyle);
 
@@ -88,8 +93,13 @@ public class ExcelUtility {
 			cell.setCellValue(rec.getInterestPaid().doubleValue());
 			cell.setCellStyle(style);
 
-			// cell for remaining principal
+			// cell for additional principal payment
 			cell = row.createCell(3);
+			cell.setCellValue(rec.getAdditionalPrincipalPayment().doubleValue());
+			cell.setCellStyle(style);
+
+			// cell for remaining principal
+			cell = row.createCell(4);
 			cell.setCellValue(rec.getRemainingPrincipal().doubleValue());
 			cell.setCellStyle(style);
 		});

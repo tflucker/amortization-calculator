@@ -1,4 +1,4 @@
-package com.tim.amortization.calculator.actions;
+package com.tim.amortization.calculator.utilities;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -32,21 +32,25 @@ public class CalculationUtility {
 		return Double.valueOf(StringUtils.replace(input, ",", ""));
 	}
 
-	private static void validateInput(JTextField principalField, JTextField interestField, JTextField mortgageField) {
+	private static void validateInput(JTextField principalField, JTextField interestField, JTextField mortgageField, JTextField additionalPrincipalField) {
 		List<String> errorMessages = new ArrayList<>();
 
 		String principalAmt = principalField.getText();
 		String interestAmt = interestField.getText();
 		String mortgageLength = mortgageField.getText();
+		String additionalPrincipal = additionalPrincipalField.getText();
 
 		if (StringUtils.isEmpty(principalAmt) || !Pattern.matches("(([0-9]){1,3}(,){1})+([0-9]){1,3}", principalAmt)) {
 			errorMessages.add("Invalid value for Principal Amount field. Value must be numeric.");
 		}
 		if (StringUtils.isEmpty(interestAmt) || !Pattern.matches("([0-9]){1,2}(.){1}([0-9]){1,2}", interestAmt)) {
-			errorMessages.add("Invalid value for Interest Percentage. must be numeric");
+			errorMessages.add("Invalid value for Interest Percentage. must be numeric.");
 		}
 		if (StringUtils.isEmpty(mortgageLength) || !StringUtils.isNumeric(mortgageLength)) {
-			errorMessages.add("Invalid value for Mortgage Length. Value must be numeric");
+			errorMessages.add("Invalid value for Mortgage Length. Value must be numeric.");
+		}
+		if(StringUtils.isEmpty(additionalPrincipal) || !Pattern.matches("([0-9]){1,8}(.){1}([0-9]){1,2}", additionalPrincipal)) {
+			errorMessages.add("Invalid value for Additional Principal. Value must be numeric.");
 		}
 
 		// if errorMessages is not empty then create one string with line separators to
@@ -114,15 +118,16 @@ public class CalculationUtility {
 	 * @throws IOException
 	 */
 	public static List<AmortizationRecord> calculateAmortizationSchedule(JTextField principalField,
-			JTextField interestField, JTextField mortgageField) throws IOException {
+			JTextField interestField, JTextField mortgageField, JTextField additionalPrincipalField) throws IOException {
 
 		// validate all user inputs, return String with a list of errors if validations
 		// fail.
-		validateInput(principalField, interestField, mortgageField);
+		validateInput(principalField, interestField, mortgageField, additionalPrincipalField);
 
 		Double principalAmt = convertTextInput(principalField.getText());
 		Double interestAmt = convertTextInput(interestField.getText());
 		Double mortgageLength = convertTextInput(mortgageField.getText());
+		Double additionalPrincipalPayment = convertTextInput(additionalPrincipalField.getText());
 
 		// monthly payment
 		BigDecimal monthlyPayment = CalculationUtility.calculateMonthlyPayment(principalAmt, interestAmt,
@@ -139,11 +144,11 @@ public class CalculationUtility {
 			BigDecimal monthlyInterest = CalculationUtility.calculateMonthlyInterest(principalAmt, interestAmt);
 			Double principalOnly = monthlyPayment.doubleValue() - monthlyInterest.doubleValue();
 
-			// update principalAmt by subtracting the principalOnly amount paid each month
-			principalAmt -= principalOnly;
+			// update principalAmt by subtracting the principalOnly amount and any additionalPrincipalPayment paid each month
+			principalAmt -= (principalOnly + additionalPrincipalPayment);
 
 			records.add(new AmortizationRecord(counter, new BigDecimal(principalOnly).setScale(2, RoundingMode.CEILING),
-					monthlyInterest, new BigDecimal(principalAmt).setScale(2, RoundingMode.CEILING)));
+					monthlyInterest, new BigDecimal(principalAmt).setScale(2, RoundingMode.CEILING), new BigDecimal(additionalPrincipalPayment).setScale(2, RoundingMode.CEILING)));
 
 			// increment counter for loop and month column in spreadsheet
 			counter++;

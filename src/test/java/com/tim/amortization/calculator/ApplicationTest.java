@@ -25,5 +25,6 @@ public class ApplicationTest {
 
 		assertNotNull(frame);
 		assertEquals("Amortization Calculator", frame.getTitle());
+		
 	}
 }
