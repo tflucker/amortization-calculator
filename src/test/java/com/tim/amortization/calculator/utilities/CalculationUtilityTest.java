@@ -103,7 +103,7 @@ public class CalculationUtilityTest {
 		List<AmortizationRecord> records = CalculationUtility.calculateAmortizationSchedule(principalField, interestField, mortgageField, additionalPrincipalField);
 
 		assertNotNull(records);
-		assertEquals(360, records.size());
+		assertEquals(211, records.size());
 		
 		AmortizationRecord rec = records.get(0);
 		assertEquals(1, rec.getMonth());

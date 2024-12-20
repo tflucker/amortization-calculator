@@ -91,8 +91,10 @@ public class Application {
 							interest, mortgageLength, additionalPrincipalPayment);
 					// create Excel document with the List<AmortizationRecord>
 					ExcelUtility.createExcelDoc(records);
-
-					JOptionPane.showMessageDialog(frame, "Done");
+					JOptionPane.showMessageDialog(frame,
+							"Excel Document created in this project directory.\nLoan paid off in "
+									+ Math.floorDiv(records.size(), 12) + " years and "
+									+ Math.floorMod(records.size(), 12) + " months.");
 				} catch (InputValidationException ex) {
 					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Input Validation Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -110,6 +112,7 @@ public class Application {
 				principal.setText(null);
 				interest.setText(null);
 				mortgageLength.setText(null);
+				additionalPrincipalPayment.setText(null);
 
 				JOptionPane.showMessageDialog(frame, "Form cleared!");
 

@@ -32,7 +32,8 @@ public class CalculationUtility {
 		return Double.valueOf(StringUtils.replace(input, ",", ""));
 	}
 
-	private static void validateInput(JTextField principalField, JTextField interestField, JTextField mortgageField, JTextField additionalPrincipalField) {
+	private static void validateInput(JTextField principalField, JTextField interestField, JTextField mortgageField,
+			JTextField additionalPrincipalField) {
 		List<String> errorMessages = new ArrayList<>();
 
 		String principalAmt = principalField.getText();
@@ -49,7 +50,8 @@ public class CalculationUtility {
 		if (StringUtils.isEmpty(mortgageLength) || !StringUtils.isNumeric(mortgageLength)) {
 			errorMessages.add("Invalid value for Mortgage Length. Value must be numeric.");
 		}
-		if(StringUtils.isEmpty(additionalPrincipal) || !Pattern.matches("([0-9]){1,8}(.){1}([0-9]){1,2}", additionalPrincipal)) {
+		if (StringUtils.isEmpty(additionalPrincipal)
+				|| !Pattern.matches("([0-9]){1,8}(.){1}([0-9]){1,2}", additionalPrincipal)) {
 			errorMessages.add("Invalid value for Additional Principal. Value must be numeric.");
 		}
 
@@ -118,7 +120,8 @@ public class CalculationUtility {
 	 * @throws IOException
 	 */
 	public static List<AmortizationRecord> calculateAmortizationSchedule(JTextField principalField,
-			JTextField interestField, JTextField mortgageField, JTextField additionalPrincipalField) throws IOException {
+			JTextField interestField, JTextField mortgageField, JTextField additionalPrincipalField)
+			throws IOException {
 
 		// validate all user inputs, return String with a list of errors if validations
 		// fail.
@@ -129,26 +132,27 @@ public class CalculationUtility {
 		Double mortgageLength = convertTextInput(mortgageField.getText());
 		Double additionalPrincipalPayment = convertTextInput(additionalPrincipalField.getText());
 
-		// monthly payment
+		// monthly payment (principalOnly + monthlyInterest)
 		BigDecimal monthlyPayment = CalculationUtility.calculateMonthlyPayment(principalAmt, interestAmt,
 				mortgageLength);
+
+		int counter = 1;
 		List<AmortizationRecord> records = new ArrayList<>();
 
-		// determine values for PMT function
-		Double numberOfPayments = mortgageLength * 12; // number of months for mortgage
-		int counter = 1;
-
-		// for every month of payment, calculate monthly interest. then fill in data for
-		// excel sheet
-		for (double i = numberOfPayments; i > 0; i--) {
+		// While principalAmt greater than zero, calculate interest and how much
+		// principal is paid. Once principalAmt is less than 0 break out of loop to
+		// create excel spreadsheet
+		while (principalAmt > 0) {
 			BigDecimal monthlyInterest = CalculationUtility.calculateMonthlyInterest(principalAmt, interestAmt);
 			Double principalOnly = monthlyPayment.doubleValue() - monthlyInterest.doubleValue();
 
-			// update principalAmt by subtracting the principalOnly amount and any additionalPrincipalPayment paid each month
+			// update principalAmt by subtracting the principalOnly amount and any
+			// additionalPrincipalPayment paid each month
 			principalAmt -= (principalOnly + additionalPrincipalPayment);
 
 			records.add(new AmortizationRecord(counter, new BigDecimal(principalOnly).setScale(2, RoundingMode.CEILING),
-					monthlyInterest, new BigDecimal(principalAmt).setScale(2, RoundingMode.CEILING), new BigDecimal(additionalPrincipalPayment).setScale(2, RoundingMode.CEILING)));
+					monthlyInterest, new BigDecimal(principalAmt).setScale(2, RoundingMode.CEILING),
+					new BigDecimal(additionalPrincipalPayment).setScale(2, RoundingMode.CEILING)));
 
 			// increment counter for loop and month column in spreadsheet
 			counter++;
